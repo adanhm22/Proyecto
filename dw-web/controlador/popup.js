@@ -1,5 +1,5 @@
 function click() {
-  alert("hola");
+   window.location.href="../vista/seleccion_carpeta.html";
 }
 
 
