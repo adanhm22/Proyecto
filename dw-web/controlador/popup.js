@@ -6,7 +6,7 @@ else alert("algo no funciona");
 
 function click() {
   // window.location.href="../vista/seleccion_carpeta.html";
-  chrome.runtime.sendMessage("hola");
+    chrome.runtime.sendMessage("hola");
   
 }
 

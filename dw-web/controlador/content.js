@@ -11,7 +11,11 @@ var cabeza = document.getElementsByTagName("title")[0];
 if(cabeza)
   chrome.runtime.sendMessage(cabeza.innerText);
 
-  chrome.runtime.onMessage.addListener(msg=>alert("mensaje: "+msg));
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse){
+  console.log("c");
+  alert(request.data);
+});
 
 // let ps = document.body.getElementsByTagName("p");
 // for  ( p of ps)
