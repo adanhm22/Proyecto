@@ -5,5 +5,15 @@
    "browser_action": {
       "default_popup": "vista/popup.html"
     },
-   "manifest_version": 2
+   "manifest_version": 2,
+   "content_scripts":[ {
+    "js": ["controlador/content.js"],
+    "matches": ["<all_urls>"]
+   }],
+   "permissions":[
+     "tabs"
+   ],
+   "background":{
+     "scripts": ["controlador/background.js"]
+   }
  }

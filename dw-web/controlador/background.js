@@ -1,3 +1,1 @@
-chrome.runtime.onInstalled.addListener(function() {
-  console.log("hola");
-});
+chrome.runtime.onMessage.addListener(msg=>alert(msg));
