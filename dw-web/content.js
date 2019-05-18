@@ -1,21 +1,33 @@
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
-   if (request.message == "hol")
-      alert("me han dicho hola!");
-   return true;
+   if (request.message == "dom")
+   {
+      alert("recogiendo dom");
+      let tratamiento = new TratarDom();
+
+      let dom = new XMLSerializer().serializeToString(tratamiento.nuevoDom());
+      tratamiento.descargarPagina(dom,'pagina.html');
+   } 
+      return true;
  });
 
+ class TratarDom
+ {
+    nuevoDom() 
+    {
+       let dom = document;
+       let a = dom.getElementsByName("a");
+       if(a.parentNode)
+         a.parentNode.removeChild(a);
+       return dom;
+    }
 
-//var cabeza = document.getElementsByTagName("title")[0];
-//if(cabeza)
-//  chrome.runtime.sendMessage(cabeza.innerText);
-//
-//  chrome.runtime.onMessage.addListener(
-//    function(request, sender, sendResponse){
-//  console.log("c");
-//  alert(request.data);
-//});
-
-// let ps = document.body.getElementsByTagName("p");
-// for  ( p of ps)
-//     p.style['background-color']= '#FF00FF';
+    descargarPagina(dom,nombre)
+    {
+      let blob = new Blob([dom],{type: 'text/plain'});
+      let a = document.createElement('a');
+      a.download = nombre;
+      a.href = window.webkitURL.createObjectURL(blob);//solo funciona en chrome
+      a.click();
+    }
+ }
