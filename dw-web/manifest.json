@@ -1,19 +1,17 @@
 {
    "name": "dw-web",
-   "version": "1.0",
+   "version": "0.1",
    "description": "aplicación para descargar paginas web",
-   "browser_action": {
-      "default_popup": "vista/popup.html"
-    },
    "manifest_version": 2,
+   "browser_action": {
+      "default_popup": "popup.html"
+    },
    "content_scripts":[ {
-    "js": ["controlador/content.js"],
-    "matches": ["<all_urls>"]
+    "matches": ["<all_urls>"],
+    "js": ["content.js"]
    }],
-   "permissions":[
-     "tabs"
-   ],
    "background":{
-     "scripts": ["controlador/background.js"]
-   }
+     "scripts": ["background.js"]
+   },
+   "permissions":["tabs","<all_urls>"]
  }
