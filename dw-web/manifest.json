@@ -11,7 +11,10 @@
     "js": ["content.js"]
    }],
    "background":{
-     "scripts": ["background.js"]
+     "scripts": [
+       "background.js",
+       "./modules/transform_dom.js"
+      ]
    },
    "permissions":["tabs","<all_urls>"]
  }
