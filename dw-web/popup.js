@@ -11,7 +11,7 @@ function click() {
         // });
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
           var activeTab = tabs[0];
-        chrome.tabs.sendMessage(activeTab.id, {"message": "dom"});
+        chrome.tabs.sendMessage(activeTab.id, {message: "html"});
         return true;
         });
         // esto ya funciona

@@ -12,8 +12,7 @@
    }],
    "background":{
      "scripts": [
-       "background.js",
-       "./modules/transform_dom.js"
+       "background.js"
       ]
    },
    "permissions":["tabs","<all_urls>"]
