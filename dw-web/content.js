@@ -1,21 +1,19 @@
 //main
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
-   if (request.message == "html")
-   {  
-      let utiles = new Utiles(); 
-      let dom = utiles.tratarDom();
-      console.log(dom);
-      let pagina = utiles.serializar(dom);
-      utiles.descargarArchivo(pagina,'pagina.html');
-      return true;
-   } 
-   else
+   switch(request.message)
    {
-      let utiles = new Utiles();
-      utiles.crearPdf();
-      return true;
+      case "html":
+         let dom = utiles.tratarDom();
+         let pagina = utiles.serializar(dom);
+         utiles.descargarArchivo(pagina,'pagina.html');
+         return true;
+      case "pdf":
+         utiles.crearPdf();
+         return true;
+      default:
+         console.log("opcion no encontrada");
+         return false;
    }
-      
  });
 

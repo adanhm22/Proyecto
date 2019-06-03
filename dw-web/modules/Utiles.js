@@ -1,11 +1,10 @@
-class Utiles
-{
-   serializar (dom)
+var utiles = {
+   serializar: function (dom)
    {
       return new XMLSerializer().serializeToString(dom);
-   }
+   },
 
-   tratarDom ()
+   tratarDom: function ()
    {
       let dom = document.cloneNode(true);
       
@@ -13,26 +12,26 @@ class Utiles
       // y todos los link pasarlos a su respectivo archivo en esa carpeta.
 
       return dom;
-   }
+   },
 
-   descargarArchivo(dom,nombre)
+   descargarArchivo: function(dom,nombre)
    {
       let blob = new Blob([dom],{type: 'text/plain'});
       let a = document.createElement('a');
       a.download = nombre;
       a.href = window.webkitURL.createObjectURL(blob);//solo funciona en chrome
       a.click();
-   }
+   },
 
-   crearPdf()
+   crearPdf: function()
    {
-      let doc = new jsPDF();
-      doc.text(20, 20, 'Hello world!');
-      doc.text(20, 30, 'This is client-side Javascript, pumping out a PDF.');
-      doc.addPage();
-      doc.text(20, 20, 'Do you like that?');
-
-      // Output as Data URI
-      doc.output('datauri');
+      var opt = {
+         margin:       0.5,
+         filename:     'myfile.pdf',
+         image:        { type: 'jpeg', quality: 0.98 },
+         html2canvas:  { scale: 2 },
+         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+       };
+      html2pdf().from(document.body).outputImg().set(opt).save();
    }
-}
+};

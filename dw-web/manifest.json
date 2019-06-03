@@ -12,7 +12,8 @@
     [
       "content.js",
       "modules/Utiles.js",
-      "modules/jspdf.js"
+      "modules/html2pdf.bundle.js"
+      
     ]
    }],
    "background":{
