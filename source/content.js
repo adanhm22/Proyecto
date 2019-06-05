@@ -9,7 +9,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
          utiles.descargarArchivo(pagina,'pagina.html');
          return true;
       case "pdf":
-         utiles.crearPdf();
+         pdf.ActivateOptions= false;
+         pdf.createPdf();
+         return true;
+      case "imagen":
+         image();
          return true;
       default:
          console.log("opcion no encontrada");

@@ -33,5 +33,16 @@ var utiles = {
          jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
        };
       html2pdf().from(document.body).outputImg().set(opt).save();
+   },
+   crearInstantanea: function ()
+   {
+      html2canvas(document.body, {
+         onrendered (canvas) {
+           let link = document.getElementById('download');;
+           let image = canvas.toDataURL();
+           link.href = image;
+           link.download = 'screenshot.png';
+         }
+        });
    }
 };
