@@ -15,18 +15,14 @@
     "matches": ["<all_urls>"],
     "js":
     [
-      "content.js",
+      "controlador.js",
       "modules/html2pdf.bundle.js",
       "modules/html2canvas.js",
       "modules/images.js",
       "modules/pdf.js",
-      "modules/html.js"
+      "modules/htmljs.js",
+      "modules/jszip.min.js"
     ]
    }],
-   "background":{
-     "scripts": [
-       "background.js"
-      ]
-   },
    "permissions":["tabs","<all_urls>"]
  }

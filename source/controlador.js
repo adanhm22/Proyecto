@@ -4,9 +4,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
    switch(request.message)
    {
       case "html":
-         let dom = utiles.tratarDom();
-         let pagina = utiles.serializar(dom);
-         utiles.descargarArchivo(pagina,'pagina.html');
+         htmljs.downloadZip(document.documentElement);
          return true;
       case "pdf":
          pdf.ActivateOptions= false;

@@ -1,4 +1,3 @@
-
 var pdf = {
     ActivateOptions: false,
     opt: 
@@ -13,9 +12,9 @@ var pdf = {
     createPdf: function() 
     {
         if(pdf.options)
-            html2pdf().from(document.body).set(opt).save();
+            html2pdf().from(document.documentElement).set(opt).save();
         else
-            html2pdf().from(document.body).save();
+            html2pdf().from(document.documentElement).save();
     }
 };
 

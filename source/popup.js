@@ -12,7 +12,7 @@ function click() {
         // });
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
           var activeTab = tabs[0];
-        chrome.tabs.sendMessage(activeTab.id, {message: select[select.selectedIndex].text});
+        chrome.tabs.sendMessage(activeTab.id, {message: select[select.selectedIndex].value});
         return true;
         });
         // esto ya funciona
