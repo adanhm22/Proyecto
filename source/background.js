@@ -5,14 +5,13 @@ chrome.runtime.onMessage.addListener(
             $.get(request.url,function(algo){
                 console.log ("tratando de obtener "+request.url);
             }).done(function (data){
-                senderResponse = {data: data};
+                senderResponse({data: data});
                 console.log (data);
                 console.log(senderResponse);
-                return true;
             }).fail(function (failure){
                 console.log("no se ha podido obtener "+request.url);
-                return false;
             });
+            return true;
         }
         else return false;
 

@@ -5,12 +5,6 @@ var  htmljs=
         //declaracion
         let html = document.cloneNode(true);
         let zip = new JSZip();
-        let zipImages = zip.folder("images");
-        let zipStyles = zip.folder("styles");
-        let zipScripts = zip.folder("scripts");
-        let images = html.images;
-        let styles = html.styleSheets;
-        let scripts = html.scripts;
 
         if (debug)
         {
@@ -20,15 +14,28 @@ var  htmljs=
             console.log(scripts);
         }
         //descarga de elementos
-        htmljs.downloadElements(images,zipImages,".png");
-        htmljs.downloadElements(styles,zipStyles,".css");
-        htmljs.downloadElements(scripts,zipScripts,".js");
-
-        zip.file("index.html",new XMLSerializer().serializeToString(html));
-        zip.generateAsync({type:"blob"})
-        .then(function(content) {
-            htmljs.saveAs(content, "page.zip");
+        htmljs.downloadHTML(zip,html,content=>{
+            this.saveAs(content,"page.zip");
         });
+    },
+
+    downloadHTML: function(zip,html,callback)
+    {
+        //declaracion
+        let images = html.images;
+        let scripts = html.scripts;
+        let styles = html.styleSheets;
+
+        this.downloadElements(images,zip.folder('images'),'.png',imageFolder=>{
+            this.downloadElements(scripts,zip.folder('scripts'),'.js',scriptsFolder=>{
+                this.downloadElements(styles,zip.folder('styles'),'.css',stylesFolder=>{
+                    zip.generateAsync({type: 'blob'})
+                    .then(content=>{
+                        callback(content);
+                    })
+                })
+            })
+        },true);
     },
 
     getNewHref: function (node,folder="",end)
@@ -42,21 +49,27 @@ var  htmljs=
         return null;
     },
 
-    downloadElement: function (node)
+    downloadElement: function (node,callback)
     {
         if (node)
         {
-            //arreglar esto
             let url = node.getAttribute("src");
-            let urlDocument = document.URL;
-            let index = urlDocument.indexOf('/',8);
-            urlDocument = urlDocument.substring(0,(index>-1)?index:urlDocument.length);
-            url = (url.startsWith('/'))?url:urlDocument+url;
+            let domain = document.domain;
+            let htt = document.URL.substring(0,document.URL.indexOf('//'));
+            let urlDocument = htt + '//' + domain;
+
+            if (url.startsWith('/') && !url.startsWith('//'))
+            {
+                url = urlDocument + url;
+            }
+            else if (url.startsWith('//'))
+            {
+                url = url.substring(2);
+            }
             if (debug)
             {
-                console.log (url);
-                console.log(urlDocument)
-                console.log(url)
+                console.log(url);
+                console.log(urlDocument);
             } 
             chrome.runtime.sendMessage(
                 { 
@@ -64,14 +77,16 @@ var  htmljs=
                 url: url
                 },function (response)
                 {
-                    if (debug) console.log(response.data);
                     if (response.data)
-                        return response.data
-                    return null;
+                    {
+                        if (debug) console.log(response.data);
+                        callback(response.data)
+                    }
+                    else
+                        callback(null);
                 }
             );
         }
-        return null;
     },
 
     getName: function (node,end)
@@ -84,7 +99,7 @@ var  htmljs=
             let pos = name.lastIndexOf("/");
             let pos2 = name.indexOf('?');
             //si la referencia contiene una / corta el string desde ahi, sino desde el principio
-            //si contiene una ? corta hasta ahi, sino hasta ek final
+            //si contiene una ? corta hasta ahi, sino hasta el final
             name = name.substring ((pos>-1)?pos+1:0,(pos2>-1)?pos2:name.length);
             if (name.lastIndexOf('.')<0) name= name+end;
             if (debug) console.log (name);
@@ -101,7 +116,7 @@ var  htmljs=
       a.click();
     },
 
-    downloadElements: function(elements,folder,end)
+    downloadElements: function(elements,folder,end,callback,images=false)
     {
         for (let i = 0; i<elements.length; i++)
         {
@@ -111,10 +126,19 @@ var  htmljs=
             
             if (name)
             {
-                let content = htmljs.downloadElement(element);
-                folder.file(name,content);
-                element.setAttribute("href",ref);
+                htmljs.downloadElement(element, content =>{
+                    if (debug) console.log(content);
+                    let download; 
+                    if (images) download = new Blob([content],{type: 'text/plain'})
+                    else download = content;
+                    if (content)
+                    {
+                        folder.file(name,download,{binary: true});
+                        element.setAttribute("href",ref);
+                    }
+                });
             }
         }
+        callback(folder);
     }
 }

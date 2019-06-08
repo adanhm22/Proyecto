@@ -1,5 +1,5 @@
 //main
-var debug = true;
+var debug = false;
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
    switch(request.message)
    {
