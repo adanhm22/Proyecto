@@ -4,7 +4,13 @@ var  htmljs=
     {
         //declaracion
         let html = document.cloneNode(true);
-        let zip = new JSZip();
+        let images = html.images;
+        let scripts = html.scripts;
+        let styles = html.styleSheets;
+        let elements = [];
+        elements.push(scripts);
+        elements.push(styles)
+        elements.push(images);
 
         if (debug)
         {
@@ -14,28 +20,13 @@ var  htmljs=
             console.log(scripts);
         }
         //descarga de elementos
-        htmljs.downloadHTML(zip,html,content=>{
-            this.saveAs(content,"page.zip");
-        });
-    },
-
-    downloadHTML: function(zip,html,callback)
-    {
-        //declaracion
-        let images = html.images;
-        let scripts = html.scripts;
-        let styles = html.styleSheets;
-
-        this.downloadElements(images,zip.folder('images'),'.png',imageFolder=>{
-            this.downloadElements(scripts,zip.folder('scripts'),'.js',scriptsFolder=>{
-                this.downloadElements(styles,zip.folder('styles'),'.css',stylesFolder=>{
-                    zip.generateAsync({type: 'blob'})
-                    .then(content=>{
-                        callback(content);
-                    })
-                })
+        this.downloadElements(html,elements,zip=>{
+            zip.generateAsync({type: "blob"})
+            .then(blob=>{
+                console.log(zip)
+                this.saveAs(blob,"page.zip");
             })
-        },true);
+        })
     },
 
     getNewHref: function (node,folder="",end)
@@ -47,46 +38,6 @@ var  htmljs=
             return href;
         }
         return null;
-    },
-
-    downloadElement: function (node,callback)
-    {
-        if (node)
-        {
-            let url = node.getAttribute("src");
-            let domain = document.domain;
-            let htt = document.URL.substring(0,document.URL.indexOf('//'));
-            let urlDocument = htt + '//' + domain;
-
-            if (url.startsWith('/') && !url.startsWith('//'))
-            {
-                url = urlDocument + url;
-            }
-            else if (url.startsWith('//'))
-            {
-                url = url.substring(2);
-            }
-            if (debug)
-            {
-                console.log(url);
-                console.log(urlDocument);
-            } 
-            chrome.runtime.sendMessage(
-                { 
-                message: 'download',
-                url: url
-                },function (response)
-                {
-                    if (response.data)
-                    {
-                        if (debug) console.log(response.data);
-                        callback(response.data)
-                    }
-                    else
-                        callback(null);
-                }
-            );
-        }
     },
 
     getName: function (node,end)
@@ -116,29 +67,55 @@ var  htmljs=
       a.click();
     },
 
-    downloadElements: function(elements,folder,end,callback,images=false)
+    downloadElements: function(html,Aelements,callback)
     {
-        for (let i = 0; i<elements.length; i++)
+        let zip = new JSZip();
+        let a = 0;
+        while ( a<Aelements.length)
         {
-            let element = elements[i];
-            let name = htmljs.getName(element,end);
-            let ref = htmljs.getNewHref(element,folder,end);
-            
-            if (name)
-            {
-                htmljs.downloadElement(element, content =>{
-                    if (debug) console.log(content);
-                    let download; 
-                    if (images) download = new Blob([content],{type: 'text/plain'})
-                    else download = content;
-                    if (content)
-                    {
-                        folder.file(name,download,{binary: true});
-                        element.setAttribute("href",ref);
-                    }
-                });
-            }
+                for (let i=0; i<Aelements[a].length; i++)
+                {
+                    let element = Aelements[a][i];
+                    console.log(element);
+                    if (element.getAttribute("src"))
+                    fetch(element.getAttribute("src"))
+                        .then(function(response) {
+                            return response.blob();
+                        }).then(blob=>{
+                            
+                            let name; 
+                            let ref; 
+                            switch(element.nodeName){
+                                
+                                case "IMG":
+                                    name = htmljs.getName(element,".png");
+                                    ref = htmljs.getNewHref(element,"images",".png");
+                                    zip.file("images/"+name,blob,{base64: true}); 
+                                    element.setAttribute("src",ref)
+                                    break;
+                                case "SCRIPT":
+                                    name = htmljs.getName(element,".js");
+                                    ref = htmljs.getNewHref(element,"scripts",".js");
+                                    zip.file("scripts/"+name,blob,{base64: false});
+                                    element.setAttribute("src",ref)
+                                    break;
+                                default:
+                                    if (element.type == "text/css")
+                                    { 
+                                        name = htmljs.getName(element,".css");
+                                        ref = htmljs.getNewHref(element,"styles",".css");
+                                        zip.file("styles/"+name,blob,{base64: false});
+                                        element.setAttribute("src",ref)
+                                    };
+                            }
+                        });
+                }
+            a++;
+            if (a==Aelements.length){
+                zip.file("index.html",new XMLSerializer().serializeToString(html));
+                callback(zip);
+            } 
         }
-        callback(folder);
+        
     }
 }

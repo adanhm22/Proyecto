@@ -6,8 +6,7 @@ chrome.runtime.onMessage.addListener(
                 console.log ("tratando de obtener "+request.url);
             }).done(function (data){
                 senderResponse({data: data});
-                console.log (data);
-                console.log(senderResponse);
+                console.log("enviando datos: "+request.url);
             }).fail(function (failure){
                 console.log("no se ha podido obtener "+request.url);
             });

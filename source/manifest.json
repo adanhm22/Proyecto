@@ -21,16 +21,10 @@
       "modules/images.js",
       "modules/pdf.js",
       "modules/htmljs.js",
-      "modules/jszip.min.js"
+      "modules/jszip.min.js",
+      "modules/jquery-3.4.1.min.js"
     ]
    }],
-   "permissions":["<all_urls>"],
-   "background":{
-    "scripts": 
-    [
-      "background.js",
-      "modules/jquery-3.4.1.min.js"
-    ],
-    "persistent": false
-   }
+   "permissions":["<all_urls>"]
+   
  }
