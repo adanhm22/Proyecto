@@ -1,6 +1,6 @@
 var  htmljs= 
 {
-    downloadZip: function ()
+    downloadZip:function ()
     {
         //declaracion
         let html = document.cloneNode(true);
@@ -67,7 +67,7 @@ var  htmljs=
       a.click();
     },
 
-    downloadElements: function(html,Aelements,callback)
+    downloadElements: async function(html,Aelements,callback)
     {
         let zip = new JSZip();
         let a = 0;
@@ -78,7 +78,7 @@ var  htmljs=
                     let element = Aelements[a][i];
                     console.log(element);
                     if (element.getAttribute("src"))
-                    fetch(element.getAttribute("src"))
+                    await fetch(element.getAttribute("src"))
                         .then(function(response) {
                             return response.blob();
                         }).then(blob=>{
@@ -90,13 +90,13 @@ var  htmljs=
                                 case "IMG":
                                     name = htmljs.getName(element,".png");
                                     ref = htmljs.getNewHref(element,"images",".png");
-                                    zip.file("images/"+name,blob,{base64: true}); 
+                                    zip.folder('images').file(name,blob,{base64: true}); 
                                     element.setAttribute("src",ref)
                                     break;
                                 case "SCRIPT":
                                     name = htmljs.getName(element,".js");
                                     ref = htmljs.getNewHref(element,"scripts",".js");
-                                    zip.file("scripts/"+name,blob,{base64: false});
+                                    zip.folder('scripts').file(name,blob,{base64: false});
                                     element.setAttribute("src",ref)
                                     break;
                                 default:
@@ -104,7 +104,7 @@ var  htmljs=
                                     { 
                                         name = htmljs.getName(element,".css");
                                         ref = htmljs.getNewHref(element,"styles",".css");
-                                        zip.file("styles/"+name,blob,{base64: false});
+                                        zip.folder('styles').file(name,blob,{base64: false});
                                         element.setAttribute("src",ref)
                                     };
                             }

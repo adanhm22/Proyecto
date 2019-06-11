@@ -1,16 +1,17 @@
 chrome.runtime.onMessage.addListener(
     (request, sender, senderResponse) => {
-        if (request.message == "download")
+        if (request.message == "open_url")
         {
-            $.get(request.url,function(algo){
-                console.log ("tratando de obtener "+request.url);
-            }).done(function (data){
-                senderResponse({data: data});
-                console.log("enviando datos: "+request.url);
-            }).fail(function (failure){
-                console.log("no se ha podido obtener "+request.url);
+            chrome.tabs.create({'url': chrome.extension.getURL(request.url)}, function(tab){
+                if (request.debug) console.log("entrando en la página "+request.url);
+                return true;
             });
-            return true;
+        }else if(request.message=="pruebas")
+        {
+            chrome.tabs.create({'url': 'about:blank'}, function(tab){
+                chrome.tabs.sendMessage(tab.id,{message:'escribir',data:request.data});
+                return true;
+            })
         }
         else return false;
 

@@ -3,17 +3,25 @@
   <head>
     <meta charset="utf-8">
     <title>dw-web</title>
-
+    <link rel = 'stylesheet' href ='styles.css'/>
   </head>
   <body>
-    <img src="res/dwWeb48x48.png" />
-    <p>Formato</p>
+    <img src="../res/dwWeb48x48.png" />
+    <div>
+      <a>&nbsp;opción:&nbsp;</a>
     <select id = "seleccion">
         <option value="pdf">pdf</option>
-        <option value="html">html</option>
+        <option value="html">html</option>  
         <option value="imagen">imagen</option>
+        <option value="guardar">guardar</option>
       </select>
+    </div>
+    <br>
+      <div>&nbsp;
     <button id="boton">capturar</button>
+    <button id="galeria">galería</button>
+  </div>
+  <br>
 <script src="popup.js"></script>
   </body>
 
