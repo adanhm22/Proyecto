@@ -1,10 +1,10 @@
 {
    "name": "dw-web",
-   "version": "0.9",
+   "version": "0.9.2",
    "description": "aplicación para descargar paginas web",
    "manifest_version": 2,
    "browser_action": {
-      "default_popup": "view/popup.html"
+      "default_popup": "popup/popup.html"
     },
     "icons": {
       "16": "res/dwWeb16x16.png",
@@ -15,16 +15,17 @@
     "matches": ["<all_urls>"],
     "js":
     [
-      "controlador.js",
-      "modules/html2pdf.bundle.js",
-      "modules/html2canvas.js",
-      "modules/images.js",
-      "modules/pdf.js",
-      "modules/htmljs.js",
-      "modules/jszip.min.js",
-      "modules/jquery-3.4.1.min.js",
-      "modules/galery.js",
-      "view/script.js"
+      
+      "libraries/html2pdf.bundle.js",
+      "libraries/html2canvas.js",
+      "libraries/jszip.min.js",
+      "libraries/jquery-3.4.1.min.js",
+
+      "content/controlador.js",
+      "content/images.js",
+      "content/pdf.js",
+      "content/htmljs.js",
+      "content/galery.js"
     ]
    }],
    "permissions":["<all_urls>","tabs","storage"],

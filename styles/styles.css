@@ -37,7 +37,7 @@ body {
     line-height: 1;
     min-width: 140px; /* your desired width */
     max-width: 100%;
-     position: relative;
+    position: relative;
     vertical-align:middle;
 }
 ol, ul {
