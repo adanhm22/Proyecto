@@ -53,7 +53,7 @@ var  htmljs=
             //si contiene una ? corta hasta ahi, sino hasta el final
             name = name.substring ((pos>-1)?pos+1:0,(pos2>-1)?pos2:name.length);
             if (name.lastIndexOf('.')<0) name= name+end;
-            if (debug) console.log (name);
+            if (!name.endsWith('.js')&&end=='.js') name+='.js';
             return name;
         }
         return null;
@@ -76,7 +76,6 @@ var  htmljs=
                 for (let i=0; i<Aelements[a].length; i++)
                 {
                     let element = Aelements[a][i];
-                    console.log(element);
                     if (element.getAttribute("src"))
                     await fetch(element.getAttribute("src"))
                         .then(function(response) {
@@ -85,6 +84,7 @@ var  htmljs=
                             
                             let name; 
                             let ref; 
+                            let type = (element.nodeName)?element.nodeName:element.type
                             switch(element.nodeName){
                                 
                                 case "IMG":
@@ -99,15 +99,15 @@ var  htmljs=
                                     zip.folder('scripts').file(name,blob,{base64: false});
                                     element.setAttribute("src",ref)
                                     break;
-                                default:
-                                    if (element.type == "text/css")
-                                    { 
-                                        name = htmljs.getName(element,".css");
-                                        ref = htmljs.getNewHref(element,"styles",".css");
-                                        zip.folder('styles').file(name,blob,{base64: false});
-                                        element.setAttribute("src",ref)
-                                    };
+
+                                case "text/css":
+                                    name = htmljs.getName(element,".css");
+                                    ref = htmljs.getNewHref(element,"styles",".css");
+                                    zip.folder('styles').file(name,blob,{base64: false});
+                                    element.setAttribute("src",ref)
                             }
+                            console.log("name => "+name)
+                            console.log("ref => "+ref)
                         });
                 }
             a++;
