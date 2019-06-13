@@ -1,4 +1,4 @@
-var botonCaptura = document.getElementById("boton");
+﻿var botonCaptura = document.getElementById("boton");
 var botonGaleria = document.getElementById("galeria");
 var botonHelp = document.getElementById('help');
 var select = document.getElementById("seleccion").options;
@@ -15,7 +15,6 @@ function captura(mensaje = "")
         chrome.tabs.sendMessage(activeTab.id, {message: mensaje});
         return true;
         });
-        // esto ya funciona
 }
 
 function galeria()

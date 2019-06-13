@@ -112,6 +112,9 @@ var  htmljs=
                 }
             a++;
             if (a==Aelements.length){
+                let charset = document.createElement('meta');
+                charset.setAttribute('charset','UTF-8');
+                html.head.appendChild(charset);
                 zip.file("index.html",new XMLSerializer().serializeToString(html));
                 callback(zip);
             } 

@@ -6,7 +6,10 @@ var galery =
             let styles = dom.createElement('style');
             //añadir estilo
             dom.head.appendChild(styles);
-            dom.createElement('stylesh')
+
+            let charset = document.createElement('meta');
+            charset.setAttribute('charset','UTF-8');
+            html.head.appendChild(charset);
             chrome.storage.local.set({html:new XMLSerializer().serializeToString(dom)},()=>{
                 if (debug) console.log("añadiendo la pagina web")
             })

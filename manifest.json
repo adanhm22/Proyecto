@@ -26,9 +26,11 @@
       "content/pdf.js",
       "content/htmljs.js",
       "content/galery.js"
-    ]
+    ],
+    "match_about_blank": true,
+    "all_frames": true
    }],
-   "permissions":["<all_urls>","tabs","storage"],
+   "permissions":["<all_urls>","tabs","storage","activeTab"],
    "background": {
     "scripts": ["background.js"],
     "persistent": false

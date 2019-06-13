@@ -13,16 +13,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
       case "imagen":
          image();
          return true;
-      case "galeria":
-         
-            chrome.runtime.sendMessage({message: "open_url",url: 'view/index.html',debug: debug}, response=>{
-               if (debug) console.log('abriendo pagina: view/index.html');
-            });
-            return true;
       case "guardar":
             galery.setHtml();
             galery.getHtml(html=>{
-               console.log(html.html)
+               if (debug) console.log("html guardado")
             })
             return true;
       default:
