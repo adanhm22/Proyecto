@@ -1,4 +1,4 @@
-var galery = 
+var saveGalery = 
 {
     setHtml: async function()
     {
@@ -9,19 +9,15 @@ var galery =
 
             let charset = document.createElement('meta');
             charset.setAttribute('charset','UTF-8');
-            html.head.appendChild(charset);
-            chrome.storage.local.set({html:new XMLSerializer().serializeToString(dom)},()=>{
-                if (debug) console.log("añadiendo la pagina web")
-            })
+            dom.head.appendChild(charset);
+            chrome.runtime.sendMessage({
+                message: "save",
+                data: new XMLSerializer().serializeToString(dom),
+                name: 'prueba'
+            });
         });
                 /*let wnd = window.open("about:blank", "", "_blank");
                 wnd.document.write(result.html);*/
-    },
-    getHtml: function(callback)
-    {
-        chrome.storage.local.get(['html'],html=>{
-            callback(html);
-        })
     },
     eliminarImagenes:  function(callback)
     {

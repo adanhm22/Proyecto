@@ -14,10 +14,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
          image();
          return true;
       case "guardar":
-            galery.setHtml();
-            galery.getHtml(html=>{
-               if (debug) console.log("html guardado")
-            })
+            saveGalery.setHtml();
+            if (debug) console.log("html guardado")
+            return true;
+      case "open_page":
+            console.log("hola")
+            document.write(request.data);
             return true;
       default:
          console.log("opcion no encontrada");

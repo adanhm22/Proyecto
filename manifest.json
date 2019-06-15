@@ -1,6 +1,6 @@
 {
-   "name": "dw-web",
-   "version": "0.9.2",
+   "name": "d-web",
+   "version": "0.9.6",
    "description": "aplicación para descargar paginas web",
    "manifest_version": 2,
    "browser_action": {
@@ -25,15 +25,15 @@
       "content/images.js",
       "content/pdf.js",
       "content/htmljs.js",
-      "content/galery.js"
+      "content/saveGalery.js"
     ],
     "match_about_blank": true,
     "all_frames": true
    }],
-   "permissions":["<all_urls>","tabs","storage","activeTab"],
+   "permissions":["<all_urls>","tabs","storage"],
    "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "scripts": ["background.js","files.js"],
+    "persistent": true
   }
    
  }
