@@ -1,23 +1,26 @@
 chrome.runtime.onMessage.addListener(
     (request, sender, senderResponse) => {
-        if (request.message == "open_url")
-        {
-            chrome.tabs.create({'url': chrome.extension.getURL(request.url)}, function(tab){
-                if (request.debug) console.log("entrando en la página "+request.url);
-                return true;
-            });
-        }else if (request.message == 'createPage')
-        {
-            chrome.tabs.create({'url': 'https://www.google.com'}, function(tab){
-                chrome.storage.local.get(['html'],result=>{
-                    chrome.tabs.executeScript(tab.id,{code:'document.write;', matchAboutBlank: true},write=>{
-                        write(result.html);
-                    });
+        switch(request.message){
+            case "open_page": 
+                chrome.tabs.create({'url': chrome.extension.getURL(request.url)}, function(tab){
+                    if (request.debug) console.log("entrando en la página "+request.url);
                 });
-                    
-            });
+                return true;
+            case "openHtml":
+                files.readHtml(request.id,result=>{
+                    if (result.status!= "error")
+                    {
+                        let wnd = window.open('about:blank');
+                        wnd.document.write(result.result);
+                    }
+                    else 
+                        alert (result.message);
+                })
+                return true;
+            case "saveHtml": 
+                files.writeHtml(request.data,request.name);
+                return true;
         }
-
     }
 
 );

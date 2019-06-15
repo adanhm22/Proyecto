@@ -11,13 +11,11 @@ var saveGalery =
             charset.setAttribute('charset','UTF-8');
             dom.head.appendChild(charset);
             chrome.runtime.sendMessage({
-                message: "save",
+                message: "saveHtml",
                 data: new XMLSerializer().serializeToString(dom),
                 name: 'prueba'
             });
         });
-                /*let wnd = window.open("about:blank", "", "_blank");
-                wnd.document.write(result.html);*/
     },
     eliminarImagenes:  function(callback)
     {
