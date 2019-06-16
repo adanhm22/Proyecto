@@ -2,3 +2,6 @@ body{
     min-width: 170px; /* your desired width */
     max-width: 100%;
 }
+button{
+    width: 100%
+}

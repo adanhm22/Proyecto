@@ -2,30 +2,31 @@ var saveGalery =
 {
     setHtml: async function()
     {
-        this.eliminarImagenes(dom=>{
-            let styles = dom.createElement('style');
-            //añadir estilo
-            dom.head.appendChild(styles);
+        let clon = document.cloneNode(true);
+        clon = await this.eliminarImagenes(clon);
+        clon = await this.eliminarScripts(clon);
 
-            let charset = document.createElement('meta');
-            charset.setAttribute('charset','UTF-8');
-            dom.head.appendChild(charset);
-            chrome.runtime.sendMessage({
-                message: "saveHtml",
-                data: new XMLSerializer().serializeToString(dom),
-                name: 'prueba'
-            });
+        let charset = document.createElement('meta');
+        charset.setAttribute('charset','UTF-8');
+        clon.head.appendChild(charset);
+        chrome.runtime.sendMessage({
+            message: "saveHtml",
+            data: new XMLSerializer().serializeToString(clon)
         });
     },
-    eliminarImagenes:  function(callback)
+    eliminarImagenes: async function(dom)
     {
-        let clon = document.cloneNode(true);
-        let images = clon.images;
-
+        let images = dom.images;
         for (image of images)
-        {
-            image.parentNode.removeChild(image);
-        }
-        callback(clon);
+            await image.parentNode.removeChild(image);
+        console.log(dom)
+        return dom;
+    },
+    eliminarScripts: async function(dom)
+    {
+        let scripts = dom.scripts;
+        for (let i = 0; i<scripts.length; i++)
+           await  scripts[i].parentNode.removeChild(scripts[i]);
+        return dom
     }
 }

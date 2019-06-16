@@ -14,11 +14,11 @@ chrome.runtime.onMessage.addListener(
                         wnd.document.write(result.result);
                     }
                     else 
-                        alert (result.message);
+                        console.log (result.message);
                 })
                 return true;
             case "saveHtml": 
-                files.writeHtml(request.data,request.name);
+                files.writeHtml(request.data);
                 return true;
         }
     }
